@@ -14,7 +14,9 @@
   },
   "jest": {
     "testEnvironment": "node",
-    "modulePathIgnorePatterns": ["<rootDir>/dist/"],
+    "modulePathIgnorePatterns": [
+      "<rootDir>/dist/"
+    ],
     "transform": {
       "^.+\\.tsx?$": "ts-jest"
     }
@@ -22,6 +24,7 @@
   "author": "Florian Schmidt",
   "license": "MIT",
   "dependencies": {
+    "battleye": "github:lukemeaden/battleye",
     "discord.js": "^12.5.3",
     "dotenv": "^9.0.2",
     "got": "^11.8.2",

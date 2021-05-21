@@ -1,4 +1,4 @@
-import {GameStatusProvider} from '../domain/game-status-provider';
+import {GameStatusProvider} from '../../domain/game-status-provider';
 import {SteamProvider} from './steam-provider';
 import {firstValueFrom} from 'rxjs';
 import {config} from 'dotenv';

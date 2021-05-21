@@ -1,11 +1,16 @@
 import {ProvideGameStatus} from './usecase/provide-game-status';
-import {SteamProvider} from './adapter/steam-provider';
 import {Client} from 'discord.js';
-import {DiscordPublisher} from './adapter/discord-publisher';
+import {DiscordPublisher} from './adapter/discord/discord-publisher';
 import {Subscription} from 'rxjs';
-import { config } from "dotenv"
+import {config} from 'dotenv'
+import {GameStatusProvider} from './domain/game-status-provider';
+import {providerFactory} from './factories';
 
 config();
+
+export interface ProviderFactory {
+    build(): GameStatusProvider
+}
 
 class App {
     private client: Client | undefined;
@@ -13,17 +18,10 @@ class App {
     private updateSubscription: Subscription | undefined;
 
     public async setup() {
-        if (!process.env.STEAM_API_TOKEN) {
-            throw new Error('STEAM_API_TOKEN needs to be set!');
-        }
-        if (!process.env.GAME_ADDRESS) {
-            throw new Error('GAME_ADDRESS needs to be set!');
-        }
-        const provider = new SteamProvider(process.env.STEAM_API_TOKEN, process.env.GAME_ADDRESS);
         this.client = await this.createDiscordClient();
         try {
             const publisher = new DiscordPublisher(this.client);
-            this.useCase = new ProvideGameStatus(provider, publisher);
+            this.useCase = new ProvideGameStatus(providerFactory().build(), publisher);
         } catch (e) {
             this.client?.destroy();
             throw e;

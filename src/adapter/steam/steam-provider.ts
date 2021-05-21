@@ -1,4 +1,4 @@
-import {GameStatus, GameStatusProvider} from '../domain/game-status-provider';
+import {GameStatus, GameStatusProvider} from '../../domain/game-status-provider';
 import got from 'got';
 import {from, Observable, timer} from 'rxjs';
 import {switchMap} from 'rxjs/operators';

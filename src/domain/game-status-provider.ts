@@ -6,5 +6,5 @@ export interface GameStatus {
 }
 
 export interface GameStatusProvider {
-    provide(): Observable<GameStatus>
+    provide(): Observable<GameStatus | undefined>
 }

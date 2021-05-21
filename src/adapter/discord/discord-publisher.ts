@@ -1,5 +1,5 @@
-import {GameStatusPublisher} from '../domain/game-status-publisher';
-import {GameStatus} from '../domain/game-status-provider';
+import {GameStatusPublisher} from '../../domain/game-status-publisher';
+import {GameStatus} from '../../domain/game-status-provider';
 import {Client} from 'discord.js';
 
 export class DiscordPublisher implements GameStatusPublisher {

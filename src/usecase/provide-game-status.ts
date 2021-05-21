@@ -7,7 +7,7 @@ export class ProvideGameStatus {
     }
 
     provide(): Subscription {
-        return this.provider.provide().subscribe(async (status: GameStatus) => {
+        return this.provider.provide().subscribe(async (status: GameStatus | undefined) => {
             await this.publisher.publish(status);
         })
     }
