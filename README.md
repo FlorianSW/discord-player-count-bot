@@ -64,20 +64,21 @@ following configuration options independently of the selected game status provid
 
 ### Game Status providers
 
-The discord bot uses a game status provider to get the information of currently connected players.
-There are two provider available right now: `steam` and `battleye`.
+The discord bot uses a game status provider to get the information of currently connected players. There are two
+provider available right now: `steam` and `battleye`.
 
 #### Steam
 
-The `steam` provider uses the Steam web api to fetch the player count of the game server.
-It depends on the game you want to track if that information is available to steam, but most multiplayer games should provide this information.
+The `steam` provider uses the Steam web api to fetch the player count of the game server. It depends on the game you
+want to track if that information is available to steam, but most multiplayer games should provide this information.
 
-You need a Steam Web API token in order to use this provider.
-You can create an API key on this web page: https://steamcommunity.com/dev/apikey
-When using this provider, the requests made by the Discord bot are counted against the rate limit of this key and you need to agree to the terms of service of Steam.
-The provider currently polls for changes, once every 10 seconds.
+You need a Steam Web API token in order to use this provider. You can create an API key on this web
+page: https://steamcommunity.com/dev/apikey
+When using this provider, the requests made by the Discord bot are counted against the rate limit of this key and you
+need to agree to the terms of service of Steam. The provider currently polls for changes, once every 10 seconds.
 
-To configure this provider, set the `PLAYER_COUNT_PROVIDER` configuration option to `steam`, additionally configure the provider with the following options:
+To configure this provider, set the `PLAYER_COUNT_PROVIDER` configuration option to `steam`, additionally configure the
+provider with the following options:
 
 | Configuration option          | Description | Value  |
 | ----------------------------- |-------------| ------:|
@@ -86,12 +87,14 @@ To configure this provider, set the `PLAYER_COUNT_PROVIDER` configuration option
 
 #### BattlEye RCon
 
-The `battleye` provider uses the RCon protocol features provided by games which utilise the BattlEye anti-cheat software.
-Only games with BattlEye are supported by this provider, some games may also not work, even given they use BattlEye.
-In order to use this provider, you need to set the `RConPort` option in your BattlEye configuration, as well as the RConPassword option.
-Both values, together with your game servers IP address need to be configured.
+The `battleye` provider uses the RCon protocol features provided by games which utilise the BattlEye anti-cheat
+software. Only games with BattlEye (e.g. Arma 2/3 or DayZ) are supported by this provider, some games may also not work,
+even given they use BattlEye. In order to use this provider, you need to set the `RConPort` option in your BattlEye
+configuration, as well as the RConPassword option. Both values, together with your game servers IP address need to be
+configured.
 
-To configure this provider, set the `PLAYER_COUNT_PROVIDER` configuration option to `battleye`, additionally configure the provider with the following options:
+To configure this provider, set the `PLAYER_COUNT_PROVIDER` configuration option to `battleye`, additionally configure
+the provider with the following options:
 
 | Configuration option          | Description | Value  |
 | ----------------------------- |-------------| ------:|
