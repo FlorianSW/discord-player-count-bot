@@ -3,6 +3,9 @@ import {SteamProvider} from './adapter/steam-provider';
 import {Client} from 'discord.js';
 import {DiscordPublisher} from './adapter/discord-publisher';
 import {Subscription} from 'rxjs';
+import { config } from "dotenv"
+
+config();
 
 class App {
     private client: Client | undefined;

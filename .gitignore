@@ -2,3 +2,4 @@
 node_modules/
 dist/
 discord-player-count.iml
+.env

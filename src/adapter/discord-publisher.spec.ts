@@ -1,6 +1,9 @@
 import {DiscordPublisher} from './discord-publisher';
 import {Client} from 'discord.js';
 import DoneCallback = jest.DoneCallback;
+import {config} from 'dotenv';
+
+config();
 
 describe('DiscordPublisher', () => {
     let client: Client;
