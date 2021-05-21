@@ -1,5 +1,8 @@
 # Discord Player Count Bot
 
+![Docker Pulls](https://img.shields.io/docker/pulls/droidwiki/discord-player-count?style=flat-square)
+![Discord](https://img.shields.io/discord/729467994832371813?color=7289da&label=Discord&logo=discord&logoColor=ffffff&style=flat-square)
+
 <p align="center">
     <img src="assets/example.png" alt="Example of the bot">
 </p>
