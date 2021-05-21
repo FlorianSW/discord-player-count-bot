@@ -1,5 +1,6 @@
 import {GameStatusProvider} from '../domain/game-status-provider';
 import {SteamProvider} from './steam-provider';
+import {firstValueFrom} from 'rxjs';
 
 describe('SteamProvider', () => {
     let provider: GameStatusProvider;
@@ -9,7 +10,7 @@ describe('SteamProvider', () => {
     });
 
     it('returns game status', async () => {
-        expect(await provider.retrieve()).toEqual(expect.objectContaining({
+        expect(await firstValueFrom(provider.provide())).toEqual(expect.objectContaining({
             maxPlayers: 40,
             playerCount: expect.any(Number)
         }));

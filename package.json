@@ -22,6 +22,7 @@
   "license": "MIT",
   "dependencies": {
     "discord.js": "^12.5.3",
-    "got": "^11.8.2"
+    "got": "^11.8.2",
+    "rxjs": "^7.0.1"
   }
 }

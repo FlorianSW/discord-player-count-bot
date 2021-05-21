@@ -1,6 +1,7 @@
 import {ProvideGameStatus} from './provide-game-status';
 import {GameStatus, GameStatusProvider} from '../domain/game-status-provider';
 import {GameStatusPublisher} from '../domain/game-status-publisher';
+import {Observable, of} from 'rxjs';
 
 describe('ProvideGameStatus', () => {
     let useCase: ProvideGameStatus;
@@ -22,11 +23,11 @@ describe('ProvideGameStatus', () => {
 });
 
 class InMemoryGameStatusProvider implements GameStatusProvider {
-    async retrieve(): Promise<GameStatus> {
-        return {
+    provide(): Observable<GameStatus> {
+        return of({
             maxPlayers: 40,
             playerCount: 5
-        };
+        });
     }
 }
 

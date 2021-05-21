@@ -1,11 +1,14 @@
-import {GameStatusProvider} from '../domain/game-status-provider';
+import {GameStatus, GameStatusProvider} from '../domain/game-status-provider';
 import {GameStatusPublisher} from '../domain/game-status-publisher';
+import {Subscription} from 'rxjs';
 
 export class ProvideGameStatus {
     constructor(private provider: GameStatusProvider, private publisher: GameStatusPublisher) {
     }
 
-    async provide() {
-        await this.publisher.publish(await this.provider.retrieve());
+    provide(): Subscription {
+        return this.provider.provide().subscribe(async (status: GameStatus) => {
+            await this.publisher.publish(status);
+        })
     }
 }

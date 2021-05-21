@@ -2,12 +2,12 @@ import {ProvideGameStatus} from './usecase/provide-game-status';
 import {SteamProvider} from './adapter/steam-provider';
 import {Client} from 'discord.js';
 import {DiscordPublisher} from './adapter/discord-publisher';
-import Timeout = NodeJS.Timeout;
+import {Subscription} from 'rxjs';
 
 class App {
     private client: Client | undefined;
     private useCase: ProvideGameStatus | undefined;
-    private interval: Timeout | undefined;
+    private updateSubscription: Subscription | undefined;
 
     public async setup() {
         if (!process.env.STEAM_API_TOKEN) {
@@ -29,17 +29,13 @@ class App {
 
     public shutdown() {
         this.client?.destroy();
-        if (this.interval) {
-            clearInterval(this.interval);
+        if (this.updateSubscription) {
+            this.updateSubscription.unsubscribe();
         }
     }
 
-    public async pollChanges() {
-        await this.useCase?.provide();
-        this.interval = setInterval(async () => {
-            console.log('Polling for new status...');
-            await this.useCase?.provide();
-        }, 10000);
+    public async start() {
+        this.updateSubscription = this.useCase?.provide();
     }
 
     private createDiscordClient(): Promise<Client> {
@@ -65,7 +61,7 @@ const app = new App();
 app.setup().then(async () => {
     console.log('App setup done...');
 
-    await app.pollChanges();
+    await app.start();
 }, (e) => {
     console.log('Error starting the bot', e);
     process.exit(1);
