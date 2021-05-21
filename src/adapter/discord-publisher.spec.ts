@@ -25,6 +25,12 @@ describe('DiscordPublisher', () => {
 
         expect(await publisher.currentStatus()).toEqual({
             playerCount: 5, maxPlayers: 40
-        })
+        });
+    });
+
+    it('goes offline when null GameStatus provided', async () => {
+        await publisher.publish(undefined);
+
+        expect(await publisher.currentStatus()).toBeUndefined();
     });
 });
