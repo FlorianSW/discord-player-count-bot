@@ -2,6 +2,7 @@ import {GameStatus, GameStatusProvider} from '../../domain/game-status-provider'
 import got from 'got';
 import {from, Observable, timer} from 'rxjs';
 import {switchMap} from 'rxjs/operators';
+import {PollingProvider} from '../polling-provider';
 
 interface SteamGameInfo {
     response: SteamResponse;
@@ -16,11 +17,12 @@ interface SteamServer {
     players: number;
 }
 
-export class SteamProvider implements GameStatusProvider {
-    constructor(private steamApiToken: string, private gameAddress: string, private interval: number = 10000) {
+export class SteamProvider extends PollingProvider {
+    constructor(private steamApiToken: string, private gameAddress: string) {
+        super();
     }
 
-    private async retrieve(): Promise<GameStatus> {
+    protected async retrieve(): Promise<GameStatus> {
         const response = await got(`https://api.steampowered.com/IGameServersService/GetServerList/v1/?key=${this.steamApiToken}&filter=\\addr\\${this.gameAddress}`)
         const steamGameInfo: SteamGameInfo = JSON.parse(response.body);
 
@@ -32,9 +34,5 @@ export class SteamProvider implements GameStatusProvider {
             maxPlayers: steamGameInfo.response.servers[0].max_players,
             playerCount: steamGameInfo.response.servers[0].players
         }
-    }
-
-    provide(): Observable<GameStatus> {
-        return timer(0, this.interval).pipe(switchMap(() => from(this.retrieve())))
     }
 }

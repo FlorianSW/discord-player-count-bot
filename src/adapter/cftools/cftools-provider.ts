@@ -1,13 +1,13 @@
-import {GameStatus, GameStatusProvider} from '../../domain/game-status-provider';
-import {from, Observable, timer} from 'rxjs';
-import {switchMap} from 'rxjs/operators';
+import {GameStatus} from '../../domain/game-status-provider';
 import {CFToolsClient, Game} from 'cftools-sdk';
+import {PollingProvider} from '../polling-provider';
 
-export class CFToolsProvider implements GameStatusProvider {
-    constructor(private client: CFToolsClient, private hostname: string, private port: number, private interval: number = 10000) {
+export class CFToolsProvider extends PollingProvider {
+    constructor(private client: CFToolsClient, private hostname: string, private port: number) {
+        super();
     }
 
-    private async retrieve(): Promise<GameStatus> {
+    protected async retrieve(): Promise<GameStatus> {
         const details = await this.client.getGameServerDetails({
             game: Game.DayZ,
             ip: this.hostname,
@@ -18,9 +18,5 @@ export class CFToolsProvider implements GameStatusProvider {
             playerCount: details.status.players.online,
             queuedPlayers: details.status.players.queue,
         };
-    }
-
-    provide(): Observable<GameStatus> {
-        return timer(0, this.interval).pipe(switchMap(() => from(this.retrieve())))
     }
 }
