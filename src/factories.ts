@@ -2,6 +2,8 @@ import {ProviderFactory} from './index';
 import {GameStatusProvider} from './domain/game-status-provider';
 import {SteamProvider} from './adapter/steam/steam-provider';
 import {BattlEyeRconProvider} from './adapter/battleye-rcon/be-rcon-provider';
+import {CFToolsProvider} from './adapter/cftools/cftools-provider';
+import {CFToolsClientBuilder} from 'cftools-sdk';
 
 export function providerFactory(): ProviderFactory {
     switch (process.env.PLAYER_COUNT_PROVIDER) {
@@ -9,6 +11,8 @@ export function providerFactory(): ProviderFactory {
             return new SteamProviderFactory();
         case 'battleye':
             return new BattlEyeProviderFactory();
+        case 'cftools_cloud':
+            return new CFToolsCloudProviderFactory();
         default:
             throw new Error('No or unknown player count provider configured.');
     }
@@ -45,6 +49,22 @@ class BattlEyeProviderFactory implements ProviderFactory {
             parseInt(process.env.BE_RCON_PORT),
             process.env.BE_RCON_PASSWORD,
             parseInt(process.env.BE_RCON_MAX_PLAYERS)
+        );
+    }
+}
+
+class CFToolsCloudProviderFactory implements ProviderFactory {
+    build(): GameStatusProvider {
+        if (!process.env.CFTOOLS_HOSTNAME) {
+            throw new Error('CFTOOLS_HOSTNAME needs to be set!');
+        }
+        if (!process.env.CFTOOLS_PORT) {
+            throw new Error('CFTOOLS_PORT needs to be set!');
+        }
+        return new CFToolsProvider(
+            new CFToolsClientBuilder().build(),
+            process.env.CFTOOLS_HOSTNAME,
+            parseInt(process.env.CFTOOLS_PORT)
         );
     }
 }

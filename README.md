@@ -65,7 +65,7 @@ following configuration options independently of the selected game status provid
 ### Game Status providers
 
 The discord bot uses a game status provider to get the information of currently connected players. There are two
-provider available right now: `steam` and `battleye`.
+provider available right now: `steam`, `battleye` and `cftools_cloud` (DayZ only).
 
 #### Steam
 
@@ -102,3 +102,18 @@ the provider with the following options:
 | `BE_RCON_PORT`                | The RCon port of your game server.                                                                | `string`          |
 | `BE_RCON_PASSWORD`            | The RCon password of your game server.                                                            | `number`          |
 | `BE_RCON_MAX_PLAYERS`         | The configured max players of your game server (BattlEye RCon does not provide this information). | `number`          |
+
+#### CFTools Cloud (DayZ only)
+
+The `cftools_cloud` provider uses the CFTools Cloud Game-Details API to fetch information about the current status of a server.
+CFTools Cloud currently supports the game DayZ only.
+
+To configure this provider, set the `PLAYER_COUNT_PROVIDER` configuration option to `cftools_cloud`, additionally configure
+the provider with the following options:
+
+| Configuration option          | Description | Value  |
+| ----------------------------- |-------------| ------:|
+| `CFTOOLS_HOSTNAME`            | The IP address or hostname of your game-server.            | `string` (API token) |
+| `CFTOOLS_PORT`                | The game port (usually 2302 for DayZ) of your game-server. | `IPv4:Port`          |
+
+The used CFTools Cloud APIs of this provider do not need any authentication, hence there is no configuration variable for that.
