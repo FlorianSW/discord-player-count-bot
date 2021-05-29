@@ -2,6 +2,7 @@ import {DiscordPublisher} from './discord-publisher';
 import {Client} from 'discord.js';
 import DoneCallback = jest.DoneCallback;
 import {config} from 'dotenv';
+import {GameStatus} from '../../domain/game-status-provider';
 
 config();
 
@@ -29,6 +30,14 @@ describe('DiscordPublisher', () => {
         expect(await publisher.currentStatus()).toEqual({
             playerCount: 5, maxPlayers: 40
         });
+    });
+
+    it('handles queued players if present', async () => {
+        await publisher.publish({playerCount: 5, maxPlayers: 40, queuedPlayers: 2});
+
+        expect(await publisher.currentStatus()).toEqual({
+            playerCount: 5, maxPlayers: 40, queuedPlayers: 2
+        } as GameStatus);
     });
 
     it('goes offline when null GameStatus provided', async () => {
