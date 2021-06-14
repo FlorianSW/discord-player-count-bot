@@ -38,6 +38,24 @@ services:
 
 You can run as many containers as you want, one container per game server you want to track.
 
+#### Run on Heroku
+
+The bot natively supports to be deployed on Heroku.
+However, because of how Heroku works, you need to do some manual steps for your first-time setup as well.
+Follow this guide to deploy the bot on Heroku.
+The guide assumes you've installed the heroku cli, as well as git already.
+Follow [the Heroku guide](https://devcenter.heroku.com/articles/getting-started-with-nodejs#set-up) to setup your local environment if you did not do that already.
+
+1. Clone this repository: `git clone https://github.com/FlorianSW/discord-player-count-bot.git`
+2. Create a heroku app: `heroku create`
+3. Add a `.env` configuration file (e.g. by copying the `.env.example` file) and configure as needed (see below)
+4. Add the `.env` to the git repository: `git add -f .env` (you need to use the `-f` parameter as the config file is ignored)
+5. Commit the configuration changes: `git commit -m 'Add bot configuration'`
+6. Push the app to heroku: `git push heroku main`
+7. Go to the Heroku dashboard and open the newly created app
+8. Navigate to the `Resources` tab
+9. Disable the `web` dyno and enable the `worker` dyno
+
 #### Run as a plain nodejs app
 
 You can also clone this repository, build the project on your own and start the resulting JavaScript code directly. You
