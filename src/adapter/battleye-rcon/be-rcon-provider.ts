@@ -22,6 +22,15 @@ export class BattlEyeRconProvider implements GameStatusProvider {
                     });
                 });
 
+            client.playerCount().then((amount) => {
+                observer.next({
+                    playerCount: amount,
+                    maxPlayers: this.maxPlayers
+                });
+            }).catch((e) => {
+                console.log('Could not fetch initial player count', e);
+            });
+
             return {
                 unsubscribe() {
                     client.disconnect();

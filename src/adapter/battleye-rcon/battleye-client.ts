@@ -5,6 +5,12 @@ const playerDisconnectRegex = /^Player #\d+ (.+) disconnected$/;
 
 export type PlayerCallback = (playerName: string, playerCount: number) => void;
 
+function sleep(ms: number) {
+    return new Promise((resolve) => {
+        setTimeout(resolve, ms);
+    });
+}
+
 export class BattlEyeClient {
     private socket: Socket;
     private connection: Connection;
@@ -56,23 +62,12 @@ export class BattlEyeClient {
         this.connection.kill(new Error('user requested'));
     }
 
-    private onMessage(message: string) {
-        const connect = message.match(playerConnectRegex);
-        if (connect !== null) {
-            this.connectListeners.forEach(async (callback) => {
-                callback(connect!![1], await this.playerCount());
-            });
-        }
-        const disconnect = message.match(playerDisconnectRegex);
-        if (disconnect !== null) {
-            this.disconnectListeners.forEach(async (callback) => {
-                callback(disconnect!![1], await this.playerCount());
-            });
-        }
-    }
-
-    private async playerCount(): Promise<number> {
-        return new Promise((resolve, reject) => {
+    async playerCount(): Promise<number> {
+        return new Promise(async (resolve, reject) => {
+            while (!this.socket.listening) {
+                console.log('Waiting for connection');
+                await sleep(2000);
+            }
             this.connection.command('players').then(response => {
                 const output = response.data?.split(/\r?\n/);
                 if (output === undefined) {
@@ -88,5 +83,20 @@ export class BattlEyeClient {
                 reject();
             });
         });
+    }
+
+    private onMessage(message: string) {
+        const connect = message.match(playerConnectRegex);
+        if (connect !== null) {
+            this.connectListeners.forEach(async (callback) => {
+                callback(connect!![1], await this.playerCount());
+            });
+        }
+        const disconnect = message.match(playerDisconnectRegex);
+        if (disconnect !== null) {
+            this.disconnectListeners.forEach(async (callback) => {
+                callback(disconnect!![1], await this.playerCount());
+            });
+        }
     }
 }
