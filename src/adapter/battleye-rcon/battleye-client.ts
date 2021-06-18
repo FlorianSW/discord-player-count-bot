@@ -42,7 +42,7 @@ export class BattlEyeClient {
             this.onMessage(message)
         });
         this.connection.on('error', (error) => {
-            console.log('Error in RCon connection: ' + error);
+            console.log('Error in RCon connection: ', error);
         });
     }
 
