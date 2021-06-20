@@ -1,4 +1,5 @@
 import {Connection, Socket} from 'battleye';
+import {PacketOverflow} from 'battleye/dist/lib/errors';
 
 const playerConnectRegex = /Player #\d+ (.+) \((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?):([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])\) connected/
 const playerDisconnectRegex = /^Player #\d+ (.+) disconnected$/;
@@ -42,7 +43,11 @@ export class BattlEyeClient {
             this.onMessage(message)
         });
         this.connection.on('error', (error) => {
-            console.log('Error in RCon connection: ', error);
+            if (error instanceof PacketOverflow) {
+                console.log('PacketOverflow when sending packet', JSON.stringify((error.store.packet)));
+            } else {
+                console.log('Error in RCon connection: ', error);
+            }
         });
     }
 
