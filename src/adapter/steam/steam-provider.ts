@@ -26,7 +26,7 @@ export class SteamProvider extends PollingProvider {
         const response = await got(`https://api.steampowered.com/IGameServersService/GetServerList/v1/?key=${this.steamApiToken}&filter=\\addr\\${this.gameAddress}`)
         const steamGameInfo: SteamGameInfo = JSON.parse(response.body);
 
-        if (steamGameInfo.response.servers.length !== 1) {
+        if (!steamGameInfo || !steamGameInfo.response || !steamGameInfo.response.servers || steamGameInfo.response.servers.length !== 1) {
             throw new Error('Steam did not respond with a single server, aborting the game status extracting.');
         }
 
