@@ -4,7 +4,7 @@
 [![Discord](https://img.shields.io/discord/729467994832371813?color=7289da&label=Discord&logo=discord&logoColor=ffffff&style=flat-square)](https://go2tech.de/discord)
 
 <p align="center">
-    <img src="assets/example.png" alt="Example of the bot">
+    <img src="https://github.com/FlorianSW/discord-player-count-bot/raw/main/assets/example.png" alt="Example of the bot">
 </p>
 
 This is a bot implementation for the Discord API to publish the player count of a game server as the current Activity of
