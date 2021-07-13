@@ -63,8 +63,8 @@ need to have `nodejs` as well as `npm` installed.
 
 * Clone the repository: `git clone https://github.com/FlorianSW/discord-player-count-bot.git`
 * Change to the cloned repository: `cd discord-player-count-bot`
-* Build the project: `npm ci && npm run build`
-* Start the bot: `DISCORD_TOKEN=YOUR_DISCORD_BOT_TOKEN node dist/index.js`
+* Build the project: `npm ci`
+* Start the bot: `npm start`
 * Configure the bot with the necessary configuration
 
 ### Configure the bot
