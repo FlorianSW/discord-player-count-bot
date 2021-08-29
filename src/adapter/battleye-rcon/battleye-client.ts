@@ -21,7 +21,7 @@ export class BattlEyeClient {
     constructor(host: string, port: number, password: string) {
         this.socket = new Socket({
             ip: '0.0.0.0',
-            port: 2310,
+            port: 0,
         });
         this.connection = this.socket.connection({
             ip: host,
