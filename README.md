@@ -131,7 +131,7 @@ the provider with the following options:
 
 | Configuration option          | Description | Value  |
 | ----------------------------- |-------------| ------:|
-| `CFTOOLS_HOSTNAME`            | The IP address or hostname of your game-server.            | `string` (API token) |
+| `CFTOOLS_HOSTNAME`            | The IP address or hostname of your game-server.            | `string` |
 | `CFTOOLS_PORT`                | The game port (usually 2302 for DayZ) of your game-server. | `IPv4:Port`          |
 
 The used CFTools Cloud APIs of this provider do not need any authentication, hence there is no configuration variable for that.
