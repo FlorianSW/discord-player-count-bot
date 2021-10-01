@@ -103,6 +103,25 @@ provider with the following options:
 | `STEAM_API_TOKEN`             | Your Steam Web API token to authenticate requests.                                                             | `string` (API token) |
 | `GAME_ADDRESS`                | The Game address of your game server (usually the IP address of the server together with the steam query port. | `IPv4:Port`          |
 
+#### Steam Query
+
+The `steam-query` provider uses the Steam Query Protocol to fetch the player count from the game server directly. This supports
+a wide range of different game types and only requires the game servers IP address as well as the steam query port. No
+api credentials or similar things are needed.
+
+This protocol will query the game server directly. Please make sure that the host where the bot is hosted, is able to access the
+game server on the specified steam query port.
+
+To configure this provider, set the `PLAYER_COUNT_PROVIDER` configuration option to `steam-query`, additionally configure the
+provider with the following options:
+
+| Configuration option          | Description | Value  |
+| ----------------------------- |-------------| ------:|
+| `GAME_TYPE`                   | One of the supported game types. See the [list of supported games](https://www.npmjs.com/package/gamedig#user-content-games-list) for the Game Type ID of your game.                                                            | `string`             |
+| `GAME_IP`                     | The IP address of the game server you want to query.                            | `IPv4`          |
+| `GAME_QUERY_PORT`             | The steam query port configured for the game server.                            | `number`          |
+
+
 #### BattlEye RCon
 
 The `battleye` provider uses the RCon protocol features provided by games which utilise the BattlEye anti-cheat
