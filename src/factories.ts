@@ -4,11 +4,15 @@ import {SteamProvider} from './adapter/steam/steam-provider';
 import {BattlEyeRconProvider} from './adapter/battleye-rcon/be-rcon-provider';
 import {CFToolsProvider} from './adapter/cftools/cftools-provider';
 import {CFToolsClientBuilder} from 'cftools-sdk';
+import {SteamQueryProvider} from './adapter/steam_query/steam-query-provider';
+import {Type} from 'gamedig';
 
 export function providerFactory(): ProviderFactory {
     switch (process.env.PLAYER_COUNT_PROVIDER) {
         case 'steam':
             return new SteamProviderFactory();
+        case 'steam-query':
+            return new SteamQueryProviderFactory();
         case 'battleye':
             return new BattlEyeProviderFactory();
         case 'cftools_cloud':
@@ -27,6 +31,21 @@ class SteamProviderFactory implements ProviderFactory {
             throw new Error('GAME_ADDRESS needs to be set!');
         }
         return new SteamProvider(process.env.STEAM_API_TOKEN, process.env.GAME_ADDRESS);
+    }
+}
+
+class SteamQueryProviderFactory implements ProviderFactory {
+    build(): GameStatusProvider {
+        if (!process.env.GAME_TYPE) {
+            throw new Error('GAME_TYPE needs to be set!');
+        }
+        if (!process.env.GAME_IP) {
+            throw new Error('GAME_IP needs to be set!');
+        }
+        if (!process.env.GAME_QUERY_PORT) {
+            throw new Error('GAME_QUERY_PORT needs to be set!');
+        }
+        return new SteamQueryProvider(process.env.GAME_TYPE as Type, process.env.GAME_IP, parseInt(process.env.GAME_QUERY_PORT || '0'));
     }
 }
 

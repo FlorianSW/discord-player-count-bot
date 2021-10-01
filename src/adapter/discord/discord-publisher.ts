@@ -17,19 +17,21 @@ export class DiscordPublisher implements GameStatusPublisher {
             }
             await this.client.user?.setPresence({
                 status: 'online',
-                activity: {
+                activities: [{
                     type: 'PLAYING',
                     name: name
-                }
+                }]
             });
         }
     }
 
     async currentStatus(): Promise<GameStatus | undefined> {
-        if (this.client.user?.presence.status !== 'online' || this.client.user?.presence.activities.length !== 1) {
+        const guild = await this.client.guilds.cache.first()!!;
+        const member = await guild.members.fetch(this.client.user!!);
+        if (member.presence?.status !== 'online' || member.presence?.activities.length !== 1) {
             return undefined;
         }
-        const status = this.client.user?.presence.activities[0].name.split('/')
+        const status = member.presence?.activities[0].name.split('/')
         if (status.length !== 2) {
             return undefined;
         }

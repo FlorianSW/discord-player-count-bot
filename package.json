@@ -10,14 +10,14 @@
   },
   "devDependencies": {
     "@types/gamedig": "^3.0.1",
-    "@types/jest": "^26.0.20",
-    "@types/node": "^14.14.21",
+    "@types/jest": "^27.0.2",
+    "@types/node": "^16.10.2",
     "del": "^6.0.0",
     "gulp": "^4.0.2",
     "gulp-typescript": "^6.0.0-alpha.1",
-    "jest": "^26.6.3",
-    "ts-jest": "^26.4.4",
-    "typescript": "^4.1.3"
+    "jest": "^27.2.4",
+    "ts-jest": "^27.0.5",
+    "typescript": "^4.4.3"
   },
   "jest": {
     "testEnvironment": "node",
@@ -32,11 +32,11 @@
   "license": "MIT",
   "dependencies": {
     "battleye": "github:lukemeaden/battleye",
-    "cftools-sdk": "^1.1.2",
-    "discord.js": "^12.5.3",
-    "dotenv": "^9.0.2",
+    "cftools-sdk": "^1.6.4",
+    "discord.js": "^13.1.0",
+    "dotenv": "^10.0.0",
     "gamedig": "^3.0.7",
     "got": "^11.8.2",
-    "rxjs": "^7.0.1"
+    "rxjs": "^7.3.0"
   }
 }

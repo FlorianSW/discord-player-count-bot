@@ -41,7 +41,7 @@ class App {
 
     private createDiscordClient(): Promise<Client> {
         return new Promise((resolve, reject) => {
-            const client = new Client();
+            const client = new Client({intents: 0});
             client.on('ready', () => {
                 console.log(`Logged in as ${client.user?.tag}!`);
                 resolve(client);
