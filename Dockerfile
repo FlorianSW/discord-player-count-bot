@@ -1,11 +1,11 @@
-FROM node:14-alpine as build
+FROM node:16-alpine as build
 
 WORKDIR /code
 RUN apk add --no-cache git
 COPY . .
 RUN npm ci && npm run build
 
-FROM node:14-alpine
+FROM node:16-alpine
 
 WORKDIR /app
 RUN apk add --no-cache --virtual build-dependencies git
