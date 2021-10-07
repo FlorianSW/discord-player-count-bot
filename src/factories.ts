@@ -1,7 +1,6 @@
 import {ProviderFactory} from './index';
 import {GameStatusProvider} from './domain/game-status-provider';
 import {SteamProvider} from './adapter/steam/steam-provider';
-import {BattlEyeRconProvider} from './adapter/battleye-rcon/be-rcon-provider';
 import {CFToolsProvider} from './adapter/cftools/cftools-provider';
 import {CFToolsClientBuilder} from 'cftools-sdk';
 import {SteamQueryProvider} from './adapter/steam_query/steam-query-provider';
@@ -13,8 +12,6 @@ export function providerFactory(): ProviderFactory {
             return new SteamProviderFactory();
         case 'steam-query':
             return new SteamQueryProviderFactory();
-        case 'battleye':
-            return new BattlEyeProviderFactory();
         case 'cftools_cloud':
             return new CFToolsCloudProviderFactory();
         default:
@@ -46,29 +43,6 @@ class SteamQueryProviderFactory implements ProviderFactory {
             throw new Error('GAME_QUERY_PORT needs to be set!');
         }
         return new SteamQueryProvider(process.env.GAME_TYPE as Type, process.env.GAME_IP, parseInt(process.env.GAME_QUERY_PORT || '0'));
-    }
-}
-
-class BattlEyeProviderFactory implements ProviderFactory {
-    build(): GameStatusProvider {
-        if (!process.env.BE_RCON_HOST) {
-            throw new Error('BE_RCON_HOST needs to be set!');
-        }
-        if (!process.env.BE_RCON_PORT) {
-            throw new Error('BE_RCON_PORT needs to be set!');
-        }
-        if (!process.env.BE_RCON_PASSWORD) {
-            throw new Error('BE_RCON_PASSWORD needs to be set!');
-        }
-        if (!process.env.BE_RCON_MAX_PLAYERS) {
-            throw new Error('BE_RCON_MAX_PLAYERS needs to be set!');
-        }
-        return new BattlEyeRconProvider(
-            process.env.BE_RCON_HOST,
-            parseInt(process.env.BE_RCON_PORT),
-            process.env.BE_RCON_PASSWORD,
-            parseInt(process.env.BE_RCON_MAX_PLAYERS)
-        );
     }
 }
 

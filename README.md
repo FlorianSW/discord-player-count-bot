@@ -78,12 +78,12 @@ following configuration options independently of the selected game status provid
 | Configuration option          | Description | Value  |
 | ----------------------------- |-------------| ------:|
 | `DISCORD_TOKEN`               | The bot token of your discord app, obtained from https://discord.com/developers/applications -> (Select your application) -> Bot -> Token | `string` |
-| `PLAYER_COUNT_PROVIDER`       | The name of the provider you want to fetch player count information from. Currently, two providers are available: `steam` and `battleye`. | `string` |
+| `PLAYER_COUNT_PROVIDER`       | The name of the provider you want to fetch player count information from. | `string` |
 
 ### Game Status providers
 
 The discord bot uses a game status provider to get the information of currently connected players. There are two
-provider available right now: `steam`, `battleye` and `cftools_cloud` (DayZ only).
+provider available right now: `steam`, `steam-query` and `cftools_cloud` (DayZ only).
 
 #### Steam
 
@@ -120,25 +120,6 @@ provider with the following options:
 | `GAME_TYPE`                   | One of the supported game types. See the [list of supported games](https://www.npmjs.com/package/gamedig#user-content-games-list) for the Game Type ID of your game.                                                            | `string`             |
 | `GAME_IP`                     | The IP address of the game server you want to query.                            | `IPv4`          |
 | `GAME_QUERY_PORT`             | The steam query port configured for the game server.                            | `number`          |
-
-
-#### BattlEye RCon
-
-The `battleye` provider uses the RCon protocol features provided by games which utilise the BattlEye anti-cheat
-software. Only games with BattlEye (e.g. Arma 2/3 or DayZ) are supported by this provider, some games may also not work,
-even given they use BattlEye. In order to use this provider, you need to set the `RConPort` option in your BattlEye
-configuration, as well as the RConPassword option. Both values, together with your game servers IP address need to be
-configured.
-
-To configure this provider, set the `PLAYER_COUNT_PROVIDER` configuration option to `battleye`, additionally configure
-the provider with the following options:
-
-| Configuration option          | Description | Value  |
-| ----------------------------- |-------------| ------:|
-| `BE_RCON_HOST`                | The hostname/IP address of your game server.                                                      | `IPv4` |
-| `BE_RCON_PORT`                | The RCon port of your game server.                                                                | `string`          |
-| `BE_RCON_PASSWORD`            | The RCon password of your game server.                                                            | `number`          |
-| `BE_RCON_MAX_PLAYERS`         | The configured max players of your game server (BattlEye RCon does not provide this information). | `number`          |
 
 #### CFTools Cloud (DayZ only)
 
