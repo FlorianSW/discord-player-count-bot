@@ -14,7 +14,7 @@ describe('SteamProvider', () => {
 
     it('returns game status', async () => {
         expect(await firstValueFrom(provider.provide())).toEqual(expect.objectContaining({
-            maxPlayers: 40,
+            maxPlayers: expect.any(Number),
             playerCount: expect.any(Number)
         }));
     });
