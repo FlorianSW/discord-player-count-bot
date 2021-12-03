@@ -27,7 +27,7 @@ export class SteamProvider extends PollingProvider {
         const steamGameInfo: SteamGameInfo = JSON.parse(response.body);
 
         if (!steamGameInfo || !steamGameInfo.response || !steamGameInfo.response.servers || steamGameInfo.response.servers.length !== 1) {
-            throw new Error('Steam did not respond with a single server, aborting the game status extracting.');
+            throw new Error('Steam did not respond with a single server. Returned servers: ' + steamGameInfo?.response?.servers?.length);
         }
 
         return {
