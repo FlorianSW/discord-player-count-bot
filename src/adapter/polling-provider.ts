@@ -1,19 +1,21 @@
 import {GameStatus, GameStatusProvider} from '../domain/game-status-provider';
-import {asyncScheduler, delayWhen, from, map, Observable, retryWhen, tap, timer} from 'rxjs';
+import {asyncScheduler, delayWhen, from, map, Observable, retryWhen, Subject, tap, timer} from 'rxjs';
 import {switchMap} from 'rxjs/operators';
 
 export abstract class PollingProvider implements GameStatusProvider {
-    private healthy = false;
+    private healthy = true;
     private try = 1;
     private interval: number = 10000;
+    private resultSubject = new Subject<GameStatus | undefined>();
 
-    provide(): Observable<GameStatus | undefined> {
-        return timer(0, this.interval).pipe(
+    protected constructor() {
+        timer(0, this.interval).pipe(
             switchMap(() => from(this.retrieve())),
             retryWhen((errors => {
                 if (this.healthy) {
                     return errors.pipe(
                         tap(val => {
+                            this.resultSubject.next(undefined);
                             if (this.try > 15) {
                                 throw new Error('PollingProvider became unhealty, exiting... Check the configuration and make sure the game server is online.');
                             }
@@ -37,7 +39,11 @@ export abstract class PollingProvider implements GameStatusProvider {
                 this.healthy = true;
                 this.try = 1;
             }),
-        );
+        ).subscribe((val) => this.resultSubject.next(val));
+    }
+
+    provide(): Observable<GameStatus | undefined> {
+        return this.resultSubject.asObservable();
     }
 
     protected abstract retrieve(): Promise<GameStatus>;

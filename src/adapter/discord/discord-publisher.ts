@@ -9,6 +9,13 @@ export class DiscordPublisher implements GameStatusPublisher {
 
     async publish(status: GameStatus | undefined): Promise<void> {
         if (status === undefined) {
+            await this.client.user?.setPresence({
+                status: 'idle',
+                activities: [{
+                   type: 'WATCHING',
+                   name: 'the server boot',
+                }],
+            });
             await this.client.user?.setStatus('dnd');
         } else {
             let name = status.playerCount + '/' + status.maxPlayers;
