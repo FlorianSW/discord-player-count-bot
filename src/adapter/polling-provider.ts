@@ -1,4 +1,4 @@
-import {GameStatus, GameStatusProvider} from '../domain/game-status-provider';
+import {GameStatus, GameStatusProvider} from '../domain/game-status-provider.js';
 import {asyncScheduler, delayWhen, from, map, Observable, retryWhen, Subject, tap, timer} from 'rxjs';
 import {switchMap} from 'rxjs/operators';
 

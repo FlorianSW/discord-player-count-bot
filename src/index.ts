@@ -1,10 +1,10 @@
-import {ProvideGameStatus} from './usecase/provide-game-status';
+import {ProvideGameStatus} from './usecase/provide-game-status.js';
 import {Client} from 'discord.js';
-import {DiscordPublisher} from './adapter/discord/discord-publisher';
+import {DiscordPublisher} from './adapter/discord/discord-publisher.js';
 import {Subscription} from 'rxjs';
 import {config} from 'dotenv'
-import {GameStatusProvider} from './domain/game-status-provider';
-import {providerFactory} from './factories';
+import {GameStatusProvider} from './domain/game-status-provider.js';
+import {providerFactory} from './factories.js';
 
 config();
 

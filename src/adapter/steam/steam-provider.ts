@@ -1,8 +1,6 @@
-import {GameStatus, GameStatusProvider} from '../../domain/game-status-provider';
+import {GameStatus} from '../../domain/game-status-provider.js';
 import got from 'got';
-import {from, Observable, timer} from 'rxjs';
-import {switchMap} from 'rxjs/operators';
-import {PollingProvider} from '../polling-provider';
+import {PollingProvider} from '../polling-provider.js';
 
 interface SteamGameInfo {
     response: SteamResponse;

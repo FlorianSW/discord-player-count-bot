@@ -1,6 +1,6 @@
-import {ProvideGameStatus} from './provide-game-status';
-import {GameStatus, GameStatusProvider} from '../domain/game-status-provider';
-import {GameStatusPublisher} from '../domain/game-status-publisher';
+import {ProvideGameStatus} from './provide-game-status.js';
+import {GameStatus, GameStatusProvider} from '../domain/game-status-provider.js';
+import {GameStatusPublisher} from '../domain/game-status-publisher.js';
 import {Observable, of} from 'rxjs';
 
 describe('ProvideGameStatus', () => {

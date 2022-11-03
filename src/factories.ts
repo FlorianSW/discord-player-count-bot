@@ -1,9 +1,9 @@
-import {ProviderFactory} from './index';
-import {GameStatusProvider} from './domain/game-status-provider';
-import {SteamProvider} from './adapter/steam/steam-provider';
-import {CFToolsProvider} from './adapter/cftools/cftools-provider';
+import {ProviderFactory} from './index.js';
+import {GameStatusProvider} from './domain/game-status-provider.js';
+import {SteamProvider} from './adapter/steam/steam-provider.js';
+import {CFToolsProvider} from './adapter/cftools/cftools-provider.js';
 import {CFToolsClientBuilder} from 'cftools-sdk';
-import {SteamQueryProvider} from './adapter/steam_query/steam-query-provider';
+import {SteamQueryProvider} from './adapter/steam_query/steam-query-provider.js';
 import {Type} from 'gamedig';
 
 export function providerFactory(): ProviderFactory {

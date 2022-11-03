@@ -1,9 +1,9 @@
-import {GameStatus, GameStatusProvider} from '../../domain/game-status-provider';
-import got from 'got';
-import {from, Observable, timer} from 'rxjs';
-import {switchMap} from 'rxjs/operators';
-import {PollingProvider} from '../polling-provider';
-import {query, Type} from 'gamedig';
+import {GameStatus} from '../../domain/game-status-provider.js';
+import {PollingProvider} from '../polling-provider.js';
+import gamedig from 'gamedig';
+import {Type} from 'gamedig';
+
+const {query} = gamedig;
 
 export class SteamQueryProvider extends PollingProvider {
     constructor(private gameType: Type, private gameIp: string, private gameQueryPort: number) {

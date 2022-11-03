@@ -1,5 +1,5 @@
-import {GameStatusProvider} from '../../domain/game-status-provider';
-import {SteamQueryProvider} from './steam-query-provider';
+import {GameStatusProvider} from '../../domain/game-status-provider.js';
+import {SteamQueryProvider} from './steam-query-provider.js';
 import {firstValueFrom} from 'rxjs';
 import {config} from 'dotenv';
 

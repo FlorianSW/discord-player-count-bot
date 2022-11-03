@@ -1,7 +1,7 @@
-import {GameStatusPublisher} from '../../domain/game-status-publisher';
-import {GameStatus} from '../../domain/game-status-provider';
+import {GameStatusPublisher} from '../../domain/game-status-publisher.js';
+import {GameStatus} from '../../domain/game-status-provider.js';
 import {Client} from 'discord.js';
-import {max, sample} from 'rxjs/operators';
+import {ActivityType} from 'discord-api-types/v10';
 
 export class DiscordPublisher implements GameStatusPublisher {
     constructor(private client: Client) {
@@ -12,8 +12,8 @@ export class DiscordPublisher implements GameStatusPublisher {
             await this.client.user?.setPresence({
                 status: 'idle',
                 activities: [{
-                   type: 'WATCHING',
-                   name: 'the server boot',
+                    type: ActivityType.Watching,
+                    name: 'the server boot',
                 }],
             });
             await this.client.user?.setStatus('dnd');
@@ -25,7 +25,7 @@ export class DiscordPublisher implements GameStatusPublisher {
             await this.client.user?.setPresence({
                 status: 'online',
                 activities: [{
-                    type: 'PLAYING',
+                    type: ActivityType.Playing,
                     name: name
                 }]
             });

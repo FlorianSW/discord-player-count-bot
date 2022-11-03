@@ -1,5 +1,5 @@
-import {GameStatus, GameStatusProvider} from '../domain/game-status-provider';
-import {GameStatusPublisher} from '../domain/game-status-publisher';
+import {GameStatus, GameStatusProvider} from '../domain/game-status-provider.js';
+import {GameStatusPublisher} from '../domain/game-status-publisher.js';
 import {Subscription} from 'rxjs';
 
 export class ProvideGameStatus {

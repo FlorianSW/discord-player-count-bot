@@ -1,8 +1,8 @@
-import {DiscordPublisher} from './discord-publisher';
+import {DiscordPublisher} from './discord-publisher.js';
 import {Client, ClientOptions} from 'discord.js';
 import DoneCallback = jest.DoneCallback;
 import {config} from 'dotenv';
-import {GameStatus} from '../../domain/game-status-provider';
+import {GameStatus} from '../../domain/game-status-provider.js';
 
 config();
 
@@ -11,7 +11,7 @@ describe('DiscordPublisher', () => {
     let publisher: DiscordPublisher;
 
     beforeEach((done: DoneCallback) => {
-        client = new Client({} as ClientOptions);
+        client = new Client({intents: 0} as ClientOptions);
         client.on('ready', () => {
             done();
         });
