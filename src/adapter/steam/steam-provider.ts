@@ -13,6 +13,8 @@ interface SteamResponse {
 interface SteamServer {
     max_players: number;
     players: number;
+    name: string;
+    map: string;
 }
 
 export class SteamProvider extends PollingProvider {
@@ -28,9 +30,12 @@ export class SteamProvider extends PollingProvider {
             throw new Error('Steam did not respond with a single server. Returned servers: ' + steamGameInfo?.response?.servers?.length);
         }
 
+        const server = steamGameInfo.response.servers[0];
         return {
-            maxPlayers: steamGameInfo.response.servers[0].max_players,
-            playerCount: steamGameInfo.response.servers[0].players
+            maxPlayers: server.max_players,
+            playerCount: server.players,
+            name: server.name,
+            map: server.map,
         }
     }
 }

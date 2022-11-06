@@ -3,6 +3,7 @@ import {Client, ClientOptions} from 'discord.js';
 import DoneCallback = jest.DoneCallback;
 import {config} from 'dotenv';
 import {GameStatus} from '../../domain/game-status-provider.js';
+import {GameMap, MapsRepository} from '../../domain/maps-repository.js';
 
 config();
 
@@ -17,7 +18,7 @@ describe('DiscordPublisher', () => {
         });
         client.login(process.env.DISCORD_TOKEN || '');
 
-        publisher = new DiscordPublisher(client);
+        publisher = new DiscordPublisher(client, new NoOpMapsRepository());
     });
 
     afterEach(() => {
@@ -25,7 +26,7 @@ describe('DiscordPublisher', () => {
     });
 
     it('sets new status to discord bot', async () => {
-        await publisher.publish({playerCount: 5, maxPlayers: 40});
+        await publisher.publish({playerCount: 5, maxPlayers: 40, name: null, map: null});
 
         expect(await publisher.currentStatus()).toEqual({
             playerCount: 5, maxPlayers: 40
@@ -33,7 +34,7 @@ describe('DiscordPublisher', () => {
     });
 
     it('handles queued players if present', async () => {
-        await publisher.publish({playerCount: 5, maxPlayers: 40, queuedPlayers: 2});
+        await publisher.publish({playerCount: 5, maxPlayers: 40, queuedPlayers: 2, name: null, map: null});
 
         expect(await publisher.currentStatus()).toEqual({
             playerCount: 5, maxPlayers: 40, queuedPlayers: 2
@@ -46,3 +47,9 @@ describe('DiscordPublisher', () => {
         expect(await publisher.currentStatus()).toBeUndefined();
     });
 });
+
+class NoOpMapsRepository implements MapsRepository {
+    find(name: string): GameMap | undefined {
+        return undefined;
+    }
+}

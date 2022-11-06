@@ -14,9 +14,11 @@ export class CFToolsProvider extends PollingProvider {
             port: this.port,
         });
         return {
+            name: details.name,
             maxPlayers: details.status.players.slots,
             playerCount: details.status.players.online,
             queuedPlayers: details.status.players.queue,
+            map: details.map,
         };
     }
 }

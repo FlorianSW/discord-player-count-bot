@@ -5,6 +5,7 @@ import {Subscription} from 'rxjs';
 import {config} from 'dotenv'
 import {GameStatusProvider} from './domain/game-status-provider.js';
 import {providerFactory} from './factories.js';
+import {FileBackedMapRepository} from './adapter/file-backed-map-repository.js';
 
 config();
 
@@ -20,7 +21,7 @@ class App {
     public async setup() {
         this.client = await this.createDiscordClient();
         try {
-            const publisher = new DiscordPublisher(this.client);
+            const publisher = new DiscordPublisher(this.client, new FileBackedMapRepository());
             this.useCase = new ProvideGameStatus(providerFactory().build(), publisher);
         } catch (e) {
             this.client?.destroy();

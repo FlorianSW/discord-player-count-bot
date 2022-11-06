@@ -31,6 +31,8 @@ services:
   serviceName:
     image: droidwiki/discord-player-count
     restart: unless-stopped
+    volumes:
+      - ./config:/app/config
     environment:
       DISCORD_TOKEN: YOUR_DISCORD_BOT_TOKEN
       # You need more configuration here, look at the Configuration section
@@ -135,3 +137,22 @@ the provider with the following options:
 | `CFTOOLS_PORT`                | The game port (usually 2302 for DayZ) of your game-server. | `IPv4:Port`          |
 
 The used CFTools Cloud APIs of this provider do not need any authentication, hence there is no configuration variable for that.
+
+### Map images (Status message only)
+
+The bot can use an image of a map in the status message posted to the channel defined in the `DISCORD_MESSAGE_CHANNEL_ID` environment variable.
+In order to configure image urls, create a file named `maps.json` in the `config` directory.
+The key of the object is the name as returned by the game server (this is highly individual per game).
+The value is an object with the `name` and `imageUrl` key describing the map.
+For example:
+```json
+{
+  "CT": {
+    "name": "Carentan",
+    "imageUrl": "https://raw.githubusercontent.com/MarechJ/hll_rcon_tool/master/rcongui/public/maps/carentan.webp"
+  }
+}
+```
+Where `CT` is the map name returned by the game server.
+
+Make sure that the value of `imageUrl` is publicly available.

@@ -26,7 +26,9 @@ class InMemoryGameStatusProvider implements GameStatusProvider {
     provide(): Observable<GameStatus> {
         return of({
             maxPlayers: 40,
-            playerCount: 5
+            playerCount: 5,
+            name: 'Test-Server',
+            map: 'Foy',
         });
     }
 }

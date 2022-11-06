@@ -20,6 +20,8 @@ export class SteamQueryProvider extends PollingProvider {
         return {
             playerCount: result.players.length,
             maxPlayers: result.maxplayers,
+            map: result.map,
+            name: result.name,
         } as GameStatus;
     }
 }
