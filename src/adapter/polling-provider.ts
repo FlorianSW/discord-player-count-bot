@@ -17,6 +17,7 @@ export abstract class PollingProvider implements GameStatusProvider {
                         tap(val => {
                             this.resultSubject.next(undefined);
                             if (this.try > 15) {
+                                this.try = 1;
                                 throw new Error('PollingProvider became unhealty, exiting... Check the configuration and make sure the game server is online.');
                             }
                             console.log('PollingProvider errored, retrying in ' + (this.try + 1) * 2 + ' seconds for max 15 tries (' + this.try + '. try). Error:', val.message);
