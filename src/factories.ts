@@ -55,7 +55,9 @@ class CFToolsCloudProviderFactory implements ProviderFactory {
             throw new Error('CFTOOLS_PORT needs to be set!');
         }
         return new CFToolsProvider(
-            new CFToolsClientBuilder().build(),
+            new CFToolsClientBuilder().withCache().withCacheConfiguration({
+                gameServerDetails: 60,
+            }).build(),
             process.env.CFTOOLS_HOSTNAME,
             parseInt(process.env.CFTOOLS_PORT)
         );
