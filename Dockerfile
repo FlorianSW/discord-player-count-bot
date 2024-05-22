@@ -5,7 +5,7 @@ RUN apk add --no-cache git
 COPY . .
 RUN npm ci && npm run build
 
-FROM node:16-alpine
+FROM node:20-alpine
 
 WORKDIR /app
 RUN apk add --no-cache --virtual build-dependencies git
