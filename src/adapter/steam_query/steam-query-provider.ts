@@ -1,17 +1,14 @@
 import {GameStatus} from '../../domain/game-status-provider.js';
 import {PollingProvider} from '../polling-provider.js';
-import gamedig from 'gamedig';
-import {Type} from 'gamedig';
-
-const {query} = gamedig;
+import {GameDig, QueryOptions} from "gamedig";
 
 export class SteamQueryProvider extends PollingProvider {
-    constructor(private gameType: Type, private gameIp: string, private gameQueryPort: number) {
+    constructor(private gameType: QueryOptions['type'], private gameIp: string, private gameQueryPort: number) {
         super();
     }
 
     protected async retrieve(): Promise<GameStatus> {
-        const result = await query({
+        const result = await GameDig.query({
             type: this.gameType,
             host: this.gameIp,
             port: this.gameQueryPort,

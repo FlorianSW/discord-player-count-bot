@@ -1,6 +1,5 @@
 import {PollingProvider} from "../polling-provider.js";
 import {GameStatus} from "../../domain/game-status-provider.js";
-import got from "got";
 
 interface bmResponse {
     data: {
@@ -21,12 +20,15 @@ export class BattlemetricsProvider extends PollingProvider {
     }
 
     protected async retrieve(): Promise<GameStatus> {
-        const response = await got(`https://api.battlemetrics.com/servers/${this.serverId}`, {
+        const response = await fetch(`https://api.battlemetrics.com/servers/${this.serverId}`, {
             headers: {
                 Authorization: `Bearer ${this.accessToken}`,
             }
         });
-        const gameInfo: bmResponse = JSON.parse(response.body);
+        if (response.status !== 200) {
+            throw new Error('unexpected response code, expected 200, got: ' + response.status);
+        }
+        const gameInfo: bmResponse = await response.json() as bmResponse;
 
         return {
             playerCount: gameInfo.data.attributes.players,

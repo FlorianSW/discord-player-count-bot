@@ -4,8 +4,8 @@ import {SteamProvider} from './adapter/steam/steam-provider.js';
 import {CFToolsProvider} from './adapter/cftools/cftools-provider.js';
 import {CFToolsClientBuilder} from 'cftools-sdk';
 import {SteamQueryProvider} from './adapter/steam_query/steam-query-provider.js';
-import {Type} from 'gamedig';
 import {BattlemetricsProvider} from "./adapter/battlemetrics/battlemetrics-provider.js";
+import {QueryOptions} from "gamedig";
 
 export function providerFactory(): ProviderFactory {
     switch (process.env.PLAYER_COUNT_PROVIDER) {
@@ -45,7 +45,7 @@ class SteamQueryProviderFactory implements ProviderFactory {
         if (!process.env.GAME_QUERY_PORT) {
             throw new Error('GAME_QUERY_PORT needs to be set!');
         }
-        return new SteamQueryProvider(process.env.GAME_TYPE as Type, process.env.GAME_IP, parseInt(process.env.GAME_QUERY_PORT || '0'));
+        return new SteamQueryProvider(process.env.GAME_TYPE as QueryOptions['type'], process.env.GAME_IP, parseInt(process.env.GAME_QUERY_PORT || '0'));
     }
 }
 
