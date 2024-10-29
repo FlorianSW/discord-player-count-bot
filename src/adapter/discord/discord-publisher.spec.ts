@@ -18,7 +18,7 @@ describe('DiscordPublisher', () => {
         });
         client.login(process.env.DISCORD_TOKEN || '');
 
-        publisher = new DiscordPublisher(client, new NoOpMapsRepository());
+        publisher = new DiscordPublisher(client, new NoOpMapsRepository(), {playerCount: '', queuedPlayers: ''});
     });
 
     afterEach(() => {

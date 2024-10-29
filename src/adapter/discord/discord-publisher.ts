@@ -5,11 +5,16 @@ import {ActivityType} from 'discord-api-types/v10';
 import {existsSync, mkdirSync, readFileSync, writeFileSync} from 'fs';
 import {MapsRepository} from '../../domain/maps-repository.js';
 
+export interface MessageFormats {
+    playerCount: string,
+    queuedPlayers: string,
+}
+
 export class DiscordPublisher implements GameStatusPublisher {
     private messageId: string | undefined;
     private channel: TextChannel | undefined;
 
-    constructor(private readonly client: Client, private readonly maps: MapsRepository) {
+    constructor(private readonly client: Client, private readonly maps: MapsRepository, private readonly formats: MessageFormats) {
         if (!process.env.DISCORD_MESSAGE_CHANNEL_ID) {
             return
         }
@@ -65,32 +70,39 @@ export class DiscordPublisher implements GameStatusPublisher {
                 text: 'Developed by FlorianSW',
             });
         if (status === undefined) {
-            await this.client.user?.setPresence({
+            this.client.user?.setPresence({
                 status: 'idle',
                 activities: [{
                     type: ActivityType.Watching,
                     name: 'the server boot',
                 }],
             });
-            await this.client.user?.setStatus('dnd');
+            this.client.user?.setStatus('dnd');
             embed
                 .setColor(Colors.DarkGrey)
                 .setTitle('Server is offline right now, waiting for first status');
         } else {
-            let name = status.playerCount + '/' + status.maxPlayers;
+            let message = this.formats.playerCount
+                .replace('${playerCount}', status.playerCount.toString())
+                .replace('${maxPlayers}', status.maxPlayers.toString());
             if (status.queuedPlayers) {
-                name = `${name} (+${status.queuedPlayers})`;
+                message = message.replace(
+                    '${queuedPlayersMessage}',
+                    this.formats.queuedPlayers.replace('${queuedPlayers}', status.queuedPlayers.toString(10))
+                );
+            } else {
+                message = message.replace('${queuedPlayersMessage}', '');
             }
-            await this.client.user?.setPresence({
+            this.client.user?.setPresence({
                 status: 'online',
                 activities: [{
                     type: ActivityType.Playing,
-                    name: name
+                    name: message
                 }]
             });
             const fields: EmbedField[] = [{
                 name: 'Players',
-                value: name,
+                value: message,
                 inline: false,
             }];
             if (status.map) {
