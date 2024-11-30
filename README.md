@@ -24,18 +24,10 @@ There are basically two ways to run and configure this discord bot:
 The easiest method to install and use this bot is by running it in a docker container. I suggest to use docker-compose
 for that, however, starting the container with `docker run` should be fine as well.
 
-```yaml
-version: "3"
-
-services:
-  serviceName:
-    image: droidwiki/discord-player-count
-    restart: unless-stopped
-    volumes:
-      - ./config:/app/config
-    environment:
-      DISCORD_TOKEN: YOUR_DISCORD_BOT_TOKEN
-      # You need more configuration here, look at the Configuration section
+There is a ready-to-use `docker-compose-yml` file available in this repository.
+Simply create a `.env` file next to it (copying the contents of the `example.env file), set the necessary configuration values as described further in this README and run this command to start the bot:
+```shell
+docker-compose up -d
 ```
 
 You can run as many containers as you want, one container per game server you want to track.

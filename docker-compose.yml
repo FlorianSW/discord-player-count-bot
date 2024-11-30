@@ -1,0 +1,30 @@
+version: "3"
+
+services:
+  test:
+    image: droidwiki/discord-player-count
+    restart: unless-stopped
+    volumes:
+      - ./config:/app/config
+    environment:
+      # Instead of writing the environment variables here, use a `.env` file in the same directory where
+      # the docker-compose.yml file is located. Use the example.env file contents as a blueprint.
+      # Add the necessary configuration values there.
+      DISCORD_TOKEN: ${DISCORD_TOKEN}
+      DISCORD_MESSAGE_CHANNEL_ID: ${DISCORD_MESSAGE_CHANNEL_ID}
+      PLAYER_COUNT_PROVIDER: ${PLAYER_COUNT_PROVIDER}
+      DISCORD_PUBLISHER_MESSAGE_FORMAT: ${DISCORD_PUBLISHER_MESSAGE_FORMAT}
+      DISCORD_PUBLISHER_MESSAGE_QUEUED_FORMAT: ${DISCORD_PUBLISHER_MESSAGE_QUEUED_FORMAT}
+      STEAM_API_TOKEN: ${STEAM_API_TOKEN}
+      GAME_ADDRESS: ${GAME_ADDRESS}
+      BM_ACCESS_TOKEN: ${BM_ACCESS_TOKEN}
+      BM_SERVER_ID: ${BM_SERVER_ID}
+      GAME_TYPE: ${GAME_TYPE}
+      GAME_IP: ${GAME_IP}
+      GAME_QUERY_PORT: ${GAME_QUERY_PORT}
+      BE_RCON_HOST: ${BE_RCON_HOST}
+      BE_RCON_PORT: ${BE_RCON_PORT}
+      BE_RCON_PASSWORD: ${BE_RCON_PASSWORD}
+      BE_RCON_MAX_PLAYERS: ${BE_RCON_MAX_PLAYERS}
+      CFTOOLS_HOSTNAME: ${CFTOOLS_HOSTNAME}
+      CFTOOLS_PORT: ${CFTOOLS_PORT}
