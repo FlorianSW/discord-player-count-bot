@@ -34,8 +34,8 @@ export class DiscordPublisher implements GameStatusPublisher {
         if (!c) {
             throw new Error('Configured channel with ID ' + cid + ' is not known.');
         }
-        if (!c.isTextBased()) {
-            throw new Error('Configured channel with ID ' + cid + ' is not a text channel.');
+        if (!c.isSendable()) {
+            throw new Error('Configured channel with ID ' + cid + ' cannot be send to.');
         }
         const configDir = './config/';
         const configFile = configDir + 'discord_message_id';
