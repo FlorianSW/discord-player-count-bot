@@ -85,13 +85,15 @@ export class DiscordPublisher implements GameStatusPublisher {
             let message = this.formats.playerCount
                 .replace('${playerCount}', status.playerCount.toString())
                 .replace('${maxPlayers}', status.maxPlayers.toString());
-            if (status.queuedPlayers) {
+            if (status.queuedPlayers && message.indexOf('${queuedPlayersMessage}') !== -1) {
                 message = message.replace(
                     '${queuedPlayersMessage}',
                     this.formats.queuedPlayers.replace('${queuedPlayers}', status.queuedPlayers.toString(10))
                 );
             } else {
-                message = message.replace('${queuedPlayersMessage}', '');
+                message = message
+                  .replace('${queuedPlayersMessage}', '')
+                  .replace('${queuedPlayers}', '');
             }
             this.client.user?.setPresence({
                 status: 'online',
