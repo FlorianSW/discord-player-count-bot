@@ -22,8 +22,9 @@ class App {
         this.client = await this.createDiscordClient();
         try {
             const publisher = new DiscordPublisher(this.client, new FileBackedMapRepository(), {
-                playerCount: process.env.DISCORD_PUBLISHER_MESSAGE_FORMAT || '${playerCount}/${maxPlayers} $queuedPlayersMessage',
+                playerCount: process.env.DISCORD_PUBLISHER_MESSAGE_FORMAT || '${playerCount}/${maxPlayers} $queuedPlayersMessage ${nextRestartMessage}',
                 queuedPlayers: process.env.DISCORD_PUBLISHER_MESSAGE_QUEUED_FORMAT || '(+${queuedPlayers})',
+                nextRestart: process.env.DISCORD_PUBLISHER_MESSAGE_NEXT_RESTART_FORMAT || '⌛ Restart: ${nextRestartRelative}',
             });
             this.useCase = new ProvideGameStatus(providerFactory().build(), publisher);
         } catch (e) {
