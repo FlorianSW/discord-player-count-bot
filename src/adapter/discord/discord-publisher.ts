@@ -13,10 +13,14 @@ export interface MessageFormats {
 export class DiscordPublisher implements GameStatusPublisher {
     private messageId: string | undefined;
     private channel: TextChannel | undefined;
+    private vcChannelId: string | undefined;
 
     constructor(private readonly client: Client, private readonly maps: MapsRepository, private readonly formats: MessageFormats) {
         if (!process.env.DISCORD_MESSAGE_CHANNEL_ID) {
             return
+        }
+        if (process.env.DISCORD_VC_CHANNEL_ID) {
+            this.vcChannelId = process.env.DISCORD_VC_CHANNEL_ID;
         }
         this.updateCreateStatusMessage().then((c) => {
             console.log('Created or updates initial status message...');
@@ -100,6 +104,17 @@ export class DiscordPublisher implements GameStatusPublisher {
                     name: message
                 }]
             });
+            if (this.vcChannelId) {
+                const vcChannel = this.client.channels.cache.get(this.vcChannelId)
+                  || this.channel?.guild?.channels.cache.get(this.vcChannelId);
+                if (vcChannel && vcChannel.isVoiceBased()) {
+                    await vcChannel.setName(message).catch((err) => {
+                        console.error(`Failed to set voice channel name: ${err}`);
+                    });
+                } else {
+                    console.warn(`Configured voice channel with ID ${this.vcChannelId} is not a valid voice channel.`);
+                }
+            }
             const fields: EmbedField[] = [{
                 name: 'Players',
                 value: message,
@@ -113,8 +128,6 @@ export class DiscordPublisher implements GameStatusPublisher {
                     inline: false,
                 });
                 embed.setImage(map?.imageUrl || null);
-            }
-            if (status.map) {
             }
             embed
                 .setTitle(status.name)
