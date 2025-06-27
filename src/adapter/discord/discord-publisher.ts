@@ -86,12 +86,22 @@ export class DiscordPublisher implements GameStatusPublisher {
                 .replace('${playerCount}', status.playerCount.toString())
                 .replace('${maxPlayers}', status.maxPlayers.toString());
             if (status.queuedPlayers) {
-                message = message.replace(
+                if (message.indexOf('${queuedPlayersMessage}') !== -1) {
+                  message = message.replace(
                     '${queuedPlayersMessage}',
                     this.formats.queuedPlayers.replace('${queuedPlayers}', status.queuedPlayers.toString(10))
-                );
+                  );
+                }
+                if (message.indexOf('${queuedPlayers}') !== -1) {
+                  message = message.replace(
+                    '${queuedPlayers}',
+                    status.queuedPlayers.toString(10)
+                  );
+                }
             } else {
-                message = message.replace('${queuedPlayersMessage}', '');
+                message = message
+                  .replace('${queuedPlayersMessage}', '')
+                  .replace('${queuedPlayers}', '');
             }
             this.client.user?.setPresence({
                 status: 'online',
