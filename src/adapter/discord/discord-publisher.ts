@@ -14,6 +14,7 @@ export interface MessageFormats {
 export class DiscordPublisher implements GameStatusPublisher {
     private messageId: string | undefined;
     private channel: TextChannel | undefined;
+    private vcChannelId: string | undefined;
     private nextRestartTimes: number[] | undefined;
 
     public msUntilNextRestart(): number | null {
@@ -61,7 +62,10 @@ export class DiscordPublisher implements GameStatusPublisher {
 
     constructor(private readonly client: Client, private readonly maps: MapsRepository, private readonly formats: MessageFormats) {
         if (!process.env.DISCORD_MESSAGE_CHANNEL_ID) {
-            return
+            return;
+        }
+        if (process.env.DISCORD_VC_CHANNEL_ID) {
+            this.vcChannelId = process.env.DISCORD_VC_CHANNEL_ID;
         }
         if (process.env.ABSOLUTE_RESTART_TIMES?.length) {
             const times = process.env.ABSOLUTE_RESTART_TIMES.split(',').map((t) => parseInt(t.trim(), 10));
@@ -184,6 +188,17 @@ export class DiscordPublisher implements GameStatusPublisher {
                     name: message
                 }]
             });
+            if (this.vcChannelId) {
+                const vcChannel = this.client.channels.cache.get(this.vcChannelId)
+                  || this.channel?.guild?.channels.cache.get(this.vcChannelId);
+                if (vcChannel && vcChannel.isVoiceBased()) {
+                    await vcChannel.setName(message).catch((err) => {
+                        console.error(`Failed to set voice channel name: ${err}`);
+                    });
+                } else {
+                    console.warn(`Configured voice channel with ID ${this.vcChannelId} is not a valid voice channel.`);
+                }
+            }
             const fields: EmbedField[] = [{
                 name: 'Players',
                 value: message,
@@ -197,8 +212,6 @@ export class DiscordPublisher implements GameStatusPublisher {
                     inline: false,
                 });
                 embed.setImage(map?.imageUrl || null);
-            }
-            if (status.map) {
             }
             embed
                 .setTitle(status.name)
