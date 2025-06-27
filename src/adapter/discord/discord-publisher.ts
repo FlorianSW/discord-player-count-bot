@@ -8,19 +8,72 @@ import {MapsRepository} from '../../domain/maps-repository.js';
 export interface MessageFormats {
     playerCount: string,
     queuedPlayers: string,
+    nextRestart: string,
 }
 
 export class DiscordPublisher implements GameStatusPublisher {
     private messageId: string | undefined;
     private channel: TextChannel | undefined;
     private vcChannelId: string | undefined;
+    private nextRestartTimes: number[] | undefined;
+
+    public msUntilNextRestart(): number | null {
+        if (!this.nextRestartTimes || this.nextRestartTimes.length === 0) {
+            return null;
+        }
+        const now = new Date();
+        const currentHour = now.getHours();
+        const nextRestartHour = this.nextRestartTimes.find((t) => t > currentHour);
+        if (nextRestartHour === undefined) {
+            return null;
+        }
+        const nextRestartDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), nextRestartHour, 0, 0);
+        if (nextRestartDate < now) {
+            nextRestartDate.setDate(nextRestartDate.getDate() + 1);
+        }
+        return nextRestartDate.getTime() - now.getTime();
+    }
+
+    public humanReadableMs(ms: number): string {
+        const seconds = Math.floor(ms / 1000);
+        const minutes = Math.floor(seconds / 60);
+        const hours = Math.floor(minutes / 60);
+
+        const pluralize = (value: number, unit: string): string => {
+            return `${value} ${unit}${value !== 1 ? 's' : ''}`;
+        };
+
+        const parts: string[] = [];
+        if (hours > 0) {
+            parts.push(pluralize(hours, 'hour'));
+        }
+        if (minutes % 60 > 0) {
+            parts.push(pluralize(minutes % 60, 'minute'));
+        }
+        if (parts.length === 0 && seconds % 60 > 0) {
+            parts.push(pluralize(seconds % 60, 'second'));
+        }
+        if (parts.length === 0) {
+            return 'less than a second';
+        }
+
+        return parts.join(', ');
+    }
 
     constructor(private readonly client: Client, private readonly maps: MapsRepository, private readonly formats: MessageFormats) {
         if (!process.env.DISCORD_MESSAGE_CHANNEL_ID) {
-            return
+            return;
         }
         if (process.env.DISCORD_VC_CHANNEL_ID) {
             this.vcChannelId = process.env.DISCORD_VC_CHANNEL_ID;
+        }
+        if (process.env.ABSOLUTE_RESTART_TIMES?.length) {
+            const times = process.env.ABSOLUTE_RESTART_TIMES.split(',').map((t) => parseInt(t.trim(), 10));
+            if (times.some((t) => isNaN(t) || t < 0 || t > 23)) {
+                throw new Error('Invalid ABSOLUTE_RESTART_TIMES provided, must be a comma separated list of integers between (inclusive) 0 and 23.');
+            }
+            console.log('Using absolute restart times: ' + times.join(', '));
+            this.nextRestartTimes = times;
         }
         this.updateCreateStatusMessage().then((c) => {
             console.log('Created or updates initial status message...');
@@ -90,12 +143,43 @@ export class DiscordPublisher implements GameStatusPublisher {
                 .replace('${playerCount}', status.playerCount.toString())
                 .replace('${maxPlayers}', status.maxPlayers.toString());
             if (status.queuedPlayers) {
-                message = message.replace(
+                if (message.indexOf('${queuedPlayersMessage}') !== -1) {
+                  message = message.replace(
                     '${queuedPlayersMessage}',
                     this.formats.queuedPlayers.replace('${queuedPlayers}', status.queuedPlayers.toString(10))
-                );
+                  );
+                }
+                if (message.indexOf('${queuedPlayers}') !== -1) {
+                  message = message.replace(
+                    '${queuedPlayers}',
+                    status.queuedPlayers.toString(10)
+                  );
+                }
             } else {
-                message = message.replace('${queuedPlayersMessage}', '');
+                message = message
+                  .replace('${queuedPlayersMessage}', '')
+                  .replace('${queuedPlayers}', '');
+            }
+            const hasNextRestartMessage = message.indexOf('${nextRestartMessage}') !== -1;
+            const hasNextRestartRelative = message.indexOf('${nextRestartRelative}') !== -1;
+            if (hasNextRestartMessage || hasNextRestartRelative) {
+                const nextRestart = this.msUntilNextRestart();
+                if (nextRestart !== null) {
+                  const humanReadableNextRestart = this.humanReadableMs(nextRestart);
+                    if (hasNextRestartMessage) {
+                        message = message.replace(
+                            '${nextRestartMessage}',
+                            this.formats.nextRestart.replace('${nextRestartRelative}', humanReadableNextRestart)
+                        );
+                    }
+                    if (hasNextRestartRelative) {
+                        message = message.replace('${nextRestartRelative}', humanReadableNextRestart);
+                    }
+                } else {
+                    message = message
+                      .replace('${nextRestartMessage}', '')
+                      .replace('${nextRestartRelative}', '');
+                }
             }
             this.client.user?.setPresence({
                 status: 'online',
