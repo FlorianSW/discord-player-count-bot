@@ -1,1 +1,10 @@
+assets/
+maps-examples/
 node_modules/
+
+.dockerignore
+docker-compose.yml
+Dockerfile
+example.env
+Procfile
+README.md
